@@ -17,7 +17,7 @@ public class Main extends JFrame {
     public static JFrame window;
     public static JLabel label;
     public static ImageIcon bgimg;
-    public static JPanel panel;
+    public static JLayeredPane layeredPane;
     private static int w = 800;
     private static int h = 400;
 
@@ -27,18 +27,19 @@ public class Main extends JFrame {
             window.setBounds(0, 0, w, h);
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            panel = new JPanel(null);
+            layeredPane = new JLayeredPane();
+
             bgimg = new ImageIcon("D:/projects/jav/physShadows/src/bg.png");
             label = new JLabel(bgimg);
-            label.setSize(new Dimension(w, h));
-            panel.add(label);
+            label.setBounds(0, 0, w, h);
+            layeredPane.add(label, JLayeredPane.DEFAULT_LAYER);
 
             VertLine line = new VertLine();
-            line.setSize(1, h);
-            line.setLocation(w / 3, 0);
-            panel.add(line);
+            int lineX = w / 2;
+            line.setBounds(lineX, 0, 1, h);
+            layeredPane.add(line, JLayeredPane.PALETTE_LAYER);
 
-            window.setContentPane(panel);
+            window.setContentPane(layeredPane);
             window.setVisible(true);
         });
     }
