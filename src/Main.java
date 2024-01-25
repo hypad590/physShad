@@ -1,14 +1,37 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-class VertLine extends JComponent {
+class Draw extends JComponent {
+    private static float angle = 0;
+    public static void setAngle(float newAngle){
+        angle = newAngle;
+    }
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        g.setColor(Color.CYAN);
+        g.setColor(Color.GREEN);
         int x = getWidth() / 3;
         g.drawLine(x, 0, x, getHeight());
+
+        g.setColor(Color.RED);
+        int y = getHeight() /2;
+        g.drawLine(0, y ,getWidth(), y);
+
+        double rads = Math.toRadians(angle);
+
+        int centerX = getWidth()/3;
+        int centerY = getHeight()/2;
+
+        int lineLength = getWidth();
+
+        int endX = centerX + (int) (lineLength * Math.cos(rads));
+        int endY = centerY - (int) (lineLength * Math.sin(rads));
+
+        g.setColor(Color.BLACK);
+        g.drawLine(centerX,centerY,endX,endY);
     }
 }
 
@@ -20,6 +43,7 @@ public class Main extends JFrame {
     public static JLayeredPane layeredPane;
     private static int w = 800;
     private static int h = 400;
+    private static JTextField textField;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -34,11 +58,26 @@ public class Main extends JFrame {
             label.setBounds(0, 0, w, h);
             layeredPane.add(label, JLayeredPane.DEFAULT_LAYER);
 
-            VertLine line = new VertLine();
-            int lineX = w / 2;
-            line.setBounds(lineX, 0, 1, h);
-            layeredPane.add(line, JLayeredPane.PALETTE_LAYER);
+            Draw lines = new Draw();
+            lines.setBounds(0,0,w,h);
+            layeredPane.add(lines, JLayeredPane.PALETTE_LAYER);
 
+            textField = new JTextField();
+            textField.setBounds(10,10,50,20);
+            textField.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try {
+                        float newAngle = Float.parseFloat(textField.getText());
+                        Draw.setAngle(newAngle);
+                        lines.repaint();
+                    }catch (NumberFormatException ex){
+                        JOptionPane.showMessageDialog(window, "Invalid angle input", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
+
+            layeredPane.add(textField,JLayeredPane.PALETTE_LAYER);
             window.setContentPane(layeredPane);
             window.setVisible(true);
         });
