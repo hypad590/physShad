@@ -4,9 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 class Draw extends JComponent {
-    private static float angle = 0;
+    private static float angles = 0;
     public static void setAngle(float newAngle){
-        angle = newAngle;
+        angles = newAngle;
     }
     @Override
     protected void paintComponent(Graphics g) {
@@ -20,12 +20,13 @@ class Draw extends JComponent {
         int y = getHeight() /2;
         g.drawLine(0, y ,getWidth(), y);
 
-        double rads = Math.toRadians(angle);
+        double rads = Math.toRadians(angles);
 
         int centerX = getWidth()/3;
         int centerY = getHeight()/2;
 
         int lineLength = getWidth();
+
 
         int endX = centerX + (int) (lineLength * Math.cos(rads));
         int endY = centerY - (int) (lineLength * Math.sin(rads));
